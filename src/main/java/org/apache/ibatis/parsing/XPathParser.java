@@ -45,11 +45,15 @@ import org.xml.sax.SAXParseException;
  * @author Kazuki Shimizu
  */
 public class XPathParser {
-
+  // XML Document 对象
   private final Document document;
+  // 是否检验
   private boolean validation;
+  // XML 实体解析器
   private EntityResolver entityResolver;
+  // 变量 Properties 对象
   private Properties variables;
+  // 变量 XPaht对象
   private XPath xpath;
 
   public XPathParser(String xml) {
@@ -112,8 +116,16 @@ public class XPathParser {
     this.document = document;
   }
 
+  /*
+  @param xml 文件地址
+  @param validation  是否检验XML
+  @param variables  变量 Properties 对象
+  @param entityResolver  XML 实体解析器
+   */
   public XPathParser(String xml, boolean validation, Properties variables, EntityResolver entityResolver) {
+    // 公用的构造方法
     commonConstructor(validation, variables, entityResolver);
+    // 将 XML 文件解析成 Document 对象
     this.document = createDocument(new InputSource(new StringReader(xml)));
   }
 
@@ -229,7 +241,9 @@ public class XPathParser {
 
   private Document createDocument(InputSource inputSource) {
     // important: this must only be called AFTER common constructor
+    // 只能在公共构造函数之后调用
     try {
+      // 创建 DocumentBuilderFactory 对象
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       factory.setValidating(validation);
@@ -268,6 +282,7 @@ public class XPathParser {
     this.validation = validation;
     this.entityResolver = entityResolver;
     this.variables = variables;
+    // 创建 XPathFactory 对象
     XPathFactory factory = XPathFactory.newInstance();
     this.xpath = factory.newXPath();
   }
